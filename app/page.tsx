@@ -1,6 +1,7 @@
 import Image from "next/image";
 
 export default function Home() {
+        "https://images.unsplash.com/photo-1542291026-7eec264c27ff",
       name: "Stussy Hoodie",
   return (
     <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
