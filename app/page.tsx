@@ -1,171 +1,183 @@
-"use client"
+const products = [
+  {
+    id: 1,
+    name: "Nike Dunk Low",
+    brand: "Nike",
+    size: "270",
+    price: "₩320,000",
+    image:
+      "https://images.unsplash.com/photo-1542291026-7eec264c27ff",
+  },
+  {
+    id: 2,
+    name: "Stussy Hoodie",
+    brand: "Stussy",
+    size: "L",
+    price: "₩180,000",
+    image:
+      "https://images.unsplash.com/photo-1523398002811-999ca8dec234",
+  },
+]
 
-import Link from "next/link"
-import { useState } from "react"
+export default async function ProductPage({
+  params,
+}: {
+  params: Promise<{ id: string }>
+}) {
+  const { id } = await params
 
-type Product = {
-  id: number
-  name: string
-  size: string
-  price: string
-  image: string
-}
+  const product = products.find(
+    (item) => item.id === Number(id)
+  )
 
-export default function Home() {
-  const [products, setProducts] = useState<Product[]>([
-    {
-      id: 1,
-      name: "Nike Dunk Low",
-      size: "270",
-      price: "₩320,000",
-      image:
-        "https://images.unsplash.com/photo-1542291026-7eec264c27ff",
-    },
-    {
-      id: 2,
-      name: "Stussy Hoodie",
-      size: "L",
-      price: "₩180,000",
-      image:
-        "https://images.unsplash.com/photo-1523398002811-999ca8dec234",
-    },
-  ])
-
-  const [name, setName] = useState("")
-  const [size, setSize] = useState("")
-  const [price, setPrice] = useState("")
-  const [image, setImage] = useState("")
-
-  const addProduct = () => {
-    if (!name || !size || !price || !image) return
-
-    const newProduct: Product = {
-      id: Date.now(),
-      name,
-      size,
-      price,
-      image,
-    }
-
-    setProducts([newProduct, ...products])
-
-    setName("")
-    setSize("")
-    setPrice("")
-    setImage("")
+  if (!product) {
+    return (
+      <div className="min-h-screen bg-zinc-950 text-white flex items-center justify-center">
+        Product not found
+      </div>
+    )
   }
 
   return (
-    <main className="min-h-screen bg-black text-white p-8">
-      <div className="max-w-7xl mx-auto">
+    <main className="min-h-screen bg-zinc-950 text-white">
+      <div className="max-w-6xl mx-auto px-6 py-10">
 
-        <div className="flex justify-between items-center mb-12">
-          <h1 className="text-5xl font-bold">
-            RESLL
-          </h1>
+        <div className="grid md:grid-cols-2 gap-10">
 
-          <button className="bg-white text-black px-5 py-3 rounded-2xl font-semibold">
-            Login
-          </button>
-        </div>
+          {/* LEFT IMAGE */}
+          <div>
 
-        <div className="bg-zinc-900 border border-zinc-800 rounded-3xl p-6 mb-10">
-
-          <h2 className="text-3xl font-bold mb-6">
-            Add Product
-          </h2>
-
-          <div className="grid md:grid-cols-2 gap-4">
-
-            <input
-              type="text"
-              placeholder="Product Name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="bg-zinc-800 p-4 rounded-2xl outline-none"
-            />
-
-            <input
-              type="text"
-              placeholder="Size"
-              value={size}
-              onChange={(e) => setSize(e.target.value)}
-              className="bg-zinc-800 p-4 rounded-2xl outline-none"
-            />
-
-            <input
-              type="text"
-              placeholder="Price"
-              value={price}
-              onChange={(e) => setPrice(e.target.value)}
-              className="bg-zinc-800 p-4 rounded-2xl outline-none"
-            />
-
-            <input
-              type="text"
-              placeholder="Image URL"
-              value={image}
-              onChange={(e) => setImage(e.target.value)}
-              className="bg-zinc-800 p-4 rounded-2xl outline-none"
-            />
+            <div className="rounded-3xl overflow-hidden border border-zinc-800 bg-zinc-900">
+              <img
+                src={product.image}
+                className="w-full h-[650px] object-cover"
+              />
+            </div>
 
           </div>
 
-          <button
-            onClick={addProduct}
-            className="mt-6 bg-white text-black px-6 py-3 rounded-2xl font-bold"
-          >
-            Add Product
-          </button>
+          {/* RIGHT INFO */}
+          <div>
 
-        </div>
+            {/* BRAND */}
+            <p className="text-zinc-500 text-sm uppercase tracking-widest">
+              {product.brand}
+            </p>
 
-        <div className="grid md:grid-cols-3 gap-6">
+            {/* NAME */}
+            <h1 className="text-4xl font-bold mt-2 leading-tight">
+              {product.name}
+            </h1>
 
-          {products.map((product) => (
-            <Link
-              href={`/product/${product.id}`}
-              key={product.id}
-              className="block"
-            >
-              <div className="bg-zinc-900 border border-zinc-800 rounded-3xl overflow-hidden hover:scale-105 duration-300">
+            {/* PRICE BOX */}
+            <div className="mt-8 bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
 
-                <img
-                  src={product.image}
-                  alt={product.name}
-                  className="w-full h-80 object-cover"
-                />
+              <p className="text-zinc-500 text-sm">
+                Last Sale
+              </p>
 
-                <div className="p-5">
+              <h2 className="text-4xl font-bold mt-2">
+                {product.price}
+              </h2>
 
-                  <h3 className="text-2xl font-bold">
-                    {product.name}
-                  </h3>
+              <div className="grid grid-cols-2 gap-4 mt-6">
 
-                  <p className="text-zinc-400 mt-2">
-                    Size {product.size}
+                <div className="bg-zinc-800 rounded-xl p-4">
+                  <p className="text-zinc-500 text-sm">
+                    Highest Bid
                   </p>
 
-                  <div className="flex justify-between items-center mt-6">
+                  <p className="text-lg font-semibold mt-1">
+                    ₩300,000
+                  </p>
+                </div>
 
-                    <span className="text-2xl font-bold">
-                      {product.price}
-                    </span>
+                <div className="bg-zinc-800 rounded-xl p-4">
+                  <p className="text-zinc-500 text-sm">
+                    Lowest Ask
+                  </p>
 
-                    <button
-                      type="button"
-                      className="bg-white text-black px-4 py-2 rounded-xl font-semibold"
-                    >
-                      Buy
-                    </button>
-
-                  </div>
-
+                  <p className="text-lg font-semibold mt-1">
+                    ₩340,000
+                  </p>
                 </div>
 
               </div>
-            </Link>
-          ))}
+
+            </div>
+
+            {/* SIZE SELECT */}
+            <div className="mt-8">
+
+              <h3 className="text-lg font-semibold mb-4">
+                Select Size
+              </h3>
+
+              <div className="grid grid-cols-3 gap-3">
+
+                {["250", "255", "260", "265", "270", "275"].map((size) => (
+                  <button
+                    key={size}
+                    className="border border-zinc-700 rounded-xl py-4 hover:border-white transition"
+                  >
+                    {size}
+                  </button>
+                ))}
+
+              </div>
+
+            </div>
+
+            {/* ACTION BUTTONS */}
+            <div className="mt-8 grid grid-cols-2 gap-4">
+
+              <button className="bg-white text-black py-4 rounded-2xl font-bold text-lg hover:opacity-90 transition">
+                Buy Now
+              </button>
+
+              <button className="border border-zinc-700 py-4 rounded-2xl font-bold text-lg hover:bg-zinc-900 transition">
+                Sell
+              </button>
+
+            </div>
+
+            {/* PRODUCT INFO */}
+            <div className="mt-10 border-t border-zinc-800 pt-8 space-y-6">
+
+              <div>
+                <h4 className="font-semibold mb-2">
+                  Product Details
+                </h4>
+
+                <p className="text-zinc-400 leading-relaxed">
+                  Premium authenticated resale product.
+                  Carefully inspected for quality and condition.
+                </p>
+              </div>
+
+              <div>
+                <h4 className="font-semibold mb-2">
+                  Shipping
+                </h4>
+
+                <p className="text-zinc-400">
+                  Ships within 1–3 business days.
+                </p>
+              </div>
+
+              <div>
+                <h4 className="font-semibold mb-2">
+                  Authenticity
+                </h4>
+
+                <p className="text-zinc-400">
+                  All products are verified before shipment.
+                </p>
+              </div>
+
+            </div>
+
+          </div>
 
         </div>
 
